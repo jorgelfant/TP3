@@ -175,6 +175,18 @@ Le fonctionnement est très simple, la balise <jsp-property-group> ne contenant 
   non plus <include-prelude> comme nous l'avons fait dans notre exemple. Le principe de fonctionnement reste identique,
   seul le nom de la balise diffère.
 
+
+       * La JSTL nous ouvre la porte aux fonctionnalités jusque là uniquement réalisables avec des scriptlets.
+
+       * Mettre en place des constantes permet de clarifier le code d'une classe et de simplifier sa maintenance.
+
+       * Eclipse peut prendre en charge pour vous le formatage et l'indentation de votre code, ainsi que la gestion
+         automatique des imports.
+
+       * Cette prise en charge est automatisable, vous permettant ainsi de vous libérer de cette contrainte et de vous
+         concentrer sur l'utile.
+
+       * La documentation est indispensable, à condition qu'elle soit à jour.
 --%>
 </body>
 </html>
