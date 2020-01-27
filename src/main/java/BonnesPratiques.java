@@ -54,4 +54,15 @@ public class BonnesPratiques extends HttpServlet {
         this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 }
+/*
 
+Vous visualisez bien ici l'intérêt d'une telle pratique : en début de code sont accessibles en un coup d’œil toutes
+les données utilisées en dur au sein de la classe. Si vous nommez intelligemment vos constantes, vous pouvez alors,
+sans avoir à parcourir le code, savoir quelle constante correspond à quelle donnée. Ici par exemple, j'ai préfixé les
+noms des attributs de requête par "ATT_" et nommé "VUE" la constante contenant le chemin vers notre page JSP. Ainsi,
+si vous procédez plus tard à une modification sur une de ces données, il vous suffira de modifier la valeur de la
+constante correspondante et vous n'aurez pas besoin de parcourir votre code. C'est d'autant plus utile que votre
+classe est volumineuse : plus long est votre code, plus pénible il sera d'y chercher les données initialisées en dur.
+
+
+*/

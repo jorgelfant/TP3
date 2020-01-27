@@ -5,9 +5,10 @@
   Time: 11:14 AM
   To change this template use File | Settings | File Templates.
 --%>
-
+<%--
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x" %>
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -124,6 +125,56 @@ J'aurais pu vous imposer l'utilisation de tests conditionnels, ou encore de vari
 est ici uniquement de vous permettre d'être à l'aise avec l'analyse d'un document XML. Si vous n'êtes pas parvenus
 à réaliser ce simple traitement de document, vous devez identifier les points qui vous ont posé problème et revoir
 le cours plus attentivement !
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                           Inclure automatiquement la JSTL Core à toutes vos JSP
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Vous le savez, pour pouvoir utiliser les balises de la bibliothèque Core dans vos pages JSP, il est nécessaire de
+faire intervenir la directive include en tête de page :
+
+                  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+Admettons-le : dans une application, rares seront les vues qui ne nécessiteront pas l'utilisation de balises issues de
+la JSTL. Afin d'éviter d'avoir à dupliquer cette ligne dans l'intégralité de vos vues, il existe un moyen de rendre
+cette inclusion automatique ! C'est dans le fichier web.xml que vous avez la possibilité de spécifier une telle
+section :
+
+                            <?xml version="1.0" encoding="UTF-8"?>
+                            <web-app>
+                            	<jsp-config>
+                            		<jsp-property-group>
+                            			<url-pattern>*.jsp</url-pattern>
+                            			<include-prelude>/WEB-INF/taglibs.jsp</include-prelude>
+                            		</jsp-property-group>
+                            	</jsp-config>
+
+                            	...
+
+Le fonctionnement est très simple, la balise <jsp-property-group> ne contenant dans notre cas que deux balises :
+
+  <url-pattern>,    qui permet comme vous vous en doutez de spécifier à quels fichiers appliquer l'inclusion automatique.
+                    Ici, j'ai choisi de l'appliquer à tous les fichiers JSP de l'application !
+
+  <include-prelude>, qui permet de préciser l'emplacement du fichier à inclure en tête de chacune des pages couvertes
+                     par le pattern précédemment défini. Ici, j'ai nommé ce fichier taglibs.jsp .
+
+  Il ne nous reste donc plus qu'à créer un fichier taglibs.jsp sous le répertoire /WEB-INF de notre application, et à
+  y placer la directive taglib que nous souhaitons voir apparaître sur chacune de nos pages JSP :
+
+  Redémarrez Tomcat pour que les modifications apportées au fichier web.xml soient prises en compte, et vous n'aurez
+  dorénavant plus besoin de préciser la directive en haut de vos pages JSP : ce sera fait de manière transparente ! :)
+
+------------------------------------------------------------------------------------------------------------------------
+  Sachez par ailleurs que ce système est équivalent à une inclusion statique, en d'autres termes une directive
+  include <%@ include file="/WEB-INF/taglibs.jsp" %> placée en tête de chaque JSP.
+------------------------------------------------------------------------------------------------------------------------
+
+  Nous n'en avons pas l'utilité ici, mais sachez qu'il est possible, avec ce même système, d'inclure automatiquement
+  un fichier en fin de page : il faut pour cela préciser le fichier à inclure au sein d'une balise <include-coda>, et
+  non plus <include-prelude> comme nous l'avons fait dans notre exemple. Le principe de fonctionnement reste identique,
+  seul le nom de la balise diffère.
+
 --%>
 </body>
 </html>
