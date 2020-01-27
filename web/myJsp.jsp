@@ -36,11 +36,94 @@ ce projet en y intégrant la JSTL, afin de pouvoir utiliser nos chères balises 
 Une fois que c'est fait, créez pour commencer un document XML à la racine de votre projet, sous le répertoire WebContent.
 Je vous en donne ici le contenu complet :
 
+                                        On crée un fichier xml   myXml.xml
 
+------------------------------------------------------------------------------------------------------------------------
 
+Ne prêtez pas grande attention aux données modélisées par ce document. Nous avons simplement besoin d'une base simple,
+contenant de quoi nous amuser un peu avec les balises que nous venons de découvrir !
 
+Note : toute ressemblance avec des personnages existants ou ayant existé serait fortuite et indépendante de la volonté
+de l'auteur... :-°
+
+Votre mission maintenant, c'est d'écrire la page rapportInventaire.jsp se chargeant d'analyser ce document XML et de
+générer un rapport qui :
+
+       * listera chacun des livres présents ;
+
+       * affichera un message d'alerte pour chaque livre dont le stock est en dessous de la quantité minimum spécifiée ;
+
+       * listera enfin chacun des livres présents, regroupés par stocks triés du plus grand au plus faible.
+
+Cette page devra également être placée à la racine du projet, sous le répertoire WebContent, et sera donc accessible
+via l'URL http://localhost:8080/jstl_exo2/rapportInventaire.jsp.
+
+Il y a plusieurs manières de réaliser ces tâches basiques, choisissez celle qui vous semble la plus simple et logique.
+Prenez le temps de chercher et de réfléchir, et on se retrouve ensuite pour la correction !
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                 Correction
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Ne vous jetez pas sur la correction sans chercher par vous-mêmes : cet exercice n'aurait alors plus aucun intérêt.
+Je ne vous donne ici pas d'aide supplémentaire. Si vous avez suivi le cours jusqu'ici vous devez être capables de
+comprendre comment faire, les balises nécessaires pour cet exercice ressemblant fortement à celles utilisées dans celui
+concernant la bibliothèque Core !
+
+Voici donc une correction possible :
 --%>
 
 
+<%-- Récupération du document XML. --%>
+<c:import url="myXml.xml" var="myXml"/>
+<%-- Analyse du document XML récupéré. --%>
+<x:parse var="doc" doc="${myXml}"/>
+
+<p><b>Liste de tous les livres :</b></p>
+<div>
+    <ul>
+        <%-- Parcours du document parsé pour y récupérer chaque nœud "livre". --%>
+        <x:forEach var="livre" select="$doc/inventaire/livre">
+            <%-- Affichage du titre du livre récupéré. --%>
+            <li><x:out select="$livre/titre"/></li>
+        </x:forEach>
+    </ul>
+</div>
+
+<p><b>Liste des livres qu'il faut réapprovisionner :</b></p>
+<div>
+    <ul>
+        <%-- Parcours du document parsé pour y récupérer chaque nœud "livre"
+            dont le contenu du nœud "stock" est inférieur au contenu du nœud
+            "minimum". --%>
+        <x:forEach var="livre" select="$doc/inventaire/livre[stock < minimum]">
+            <%-- Affichage des titres, stocks et minimaux du livre récupéré. --%>
+            <li><x:out select="$livre/titre"/> : <x:out select="$livre/stock"/> livres en stock (limite avant alerte :
+                <x:out select="$livre/minimum"/>)
+            </li>
+        </x:forEach>
+    </ul>
+</div>
+
+<p><b>Liste des livres classés par stock :</b></p>
+<%-- Il faut réfléchir... un peu ! --%>
+<pre>
+Le tri d'une liste, d'un tableau, d'une collection... bref de manière générale le tri de données,
+ne doit pas se faire depuis votre page JSP ! Que ce soit en utilisant les API relatives aux collections,
+ou via un bean de votre couche métier, ou que sais-je encore, il est toujours préférable que votre tri
+soit effectué avant d'arriver à votre JSP. La JSP ne doit en principe que récupérer cette collection déjà triée,
+formater les données pour une mise en page particulière si nécessaire, et seulement les afficher.
+
+C'était un simple piège ici, j'espère que vous avez réfléchi avant de tenter d'implémenter un tri avec
+la JSTL, et que vous comprenez pourquoi cela ne doit pas intervenir à ce niveau ;)
+</pre>
+
+<%--
+Je n'ai fait intervenir ici que des traitements faciles, n'utilisant que des boucles et des expressions XPath.
+J'aurais pu vous imposer l'utilisation de tests conditionnels, ou encore de variables de scope, mais l'objectif
+est ici uniquement de vous permettre d'être à l'aise avec l'analyse d'un document XML. Si vous n'êtes pas parvenus
+à réaliser ce simple traitement de document, vous devez identifier les points qui vous ont posé problème et revoir
+le cours plus attentivement !
+--%>
 </body>
 </html>
